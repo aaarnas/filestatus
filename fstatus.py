@@ -9,10 +9,11 @@ def countFileData(filepath, words_dict, symbols_dict):
         for line in file:
             for word in line.split():
                 word = word.lower()
-                if word in words_dict:
-                    words_dict[word] += 1
-                else:
-                    words_dict[word] = 1
+                if len(word) > 1:
+                    if word in words_dict:
+                        words_dict[word] += 1
+                    else:
+                        words_dict[word] = 1
                 for letter in word:
                     if letter in symbols_dict:
                         symbols_dict[letter] += 1
