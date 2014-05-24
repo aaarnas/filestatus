@@ -16,6 +16,28 @@ def countFileData(filepath, words_dict, symbols_dict):
                     else:
                         symbols_dict[letter] = 1
 
+def printStatistic(wlist, slist, status_what):
+    print "--------------------------------------------------------------------"
+    print "Most common words in '%s'" % (status_what)
+    words_list = sorted(wlist.items(), key=lambda x:x[1], reverse=True)
+    i = 0
+    for item in words_list:
+        i += 1
+        if i > 10:
+            break
+        print "%s - %d" % (item[0], item[1])
+
+    print "Most common letters in '%s'" % (status_what)
+    letters_list = sorted(slist.items(),
+            key=lambda x:x[1], reverse=True)
+    i = 0
+    for item in letters_list:
+        i += 1
+        if i > 10:
+            break
+        print "%s - %d" % (item[0], item[1])
+    print "--------------------------------------------------------------------"
+
 
 def printPathStatus(path):
     print "Path '%s' information:" % (path)
@@ -30,6 +52,7 @@ def printPathStatus(path):
         if os.path.isfile(file_path):
             words_dict = {}
             symbols_dict = {}
+            print "Checking file '%s'" % (file_path)
             countFileData(file_path, words_dict, symbols_dict)
             total_words_dict = {k: total_words_dict.get(k, 0) +
                     words_dict.get(k, 0) for k in set(total_words_dict)
@@ -38,25 +61,7 @@ def printPathStatus(path):
                     symbols_dict.get(k, 0) for k in set(total_symbols_dict)
                     | set(symbols_dict)}
 
-    print "Most common words in '%s'" % (path)
-    words_list = sorted(total_words_dict.items(), key=lambda x:x[1], reverse=True)
-    i = 0
-    for item in words_list:
-        i += 1
-        if i > 10:
-            break
-        print "%s - %d" % (item[0], item[1])
-
-    print "Most common letters in '%s'" % (path)
-    letters_list = sorted(total_symbols_dict.items(),
-            key=lambda x:x[1], reverse=True)
-    i = 0
-    for item in letters_list:
-        i += 1
-        if i > 10:
-            break
-        print "%s - %d" % (item[0], item[1])
-
+    printStatistic(total_words_dict, total_symbols_dict, path)
 
 if len(sys.argv) > 1:
     if os.path.isdir(sys.argv[1]):
