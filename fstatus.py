@@ -1,7 +1,7 @@
 import os
 import sys
 
-def countFileData(filepath, words_dict, letters_dict):
+def countFileData(filepath, words_dict, symbols_dict):
     with open(filepath, 'r') as file:
         for line in file:
             for word in line.split():
@@ -11,17 +11,17 @@ def countFileData(filepath, words_dict, letters_dict):
                 else:
                     words_dict[word] = 1
                 for letter in word:
-                    if letter in letters_dict:
-                        letters_dict[letter] += 1
+                    if letter in symbols_dict:
+                        symbols_dict[letter] += 1
                     else:
-                        letters_dict[letter] = 1
+                        symbols_dict[letter] = 1
 
 
 def printPathStatus(path):
     print "Path '%s' information:" % (path)
     file_path = ""
     total_words_dict = {}
-    total_letters_dict = {}
+    total_symbols_dict = {}
     for file in os.listdir(path):
         file_path = path
         if not path.endswith('/'):
@@ -29,17 +29,17 @@ def printPathStatus(path):
         file_path += file
         if os.path.isfile(file_path):
             words_dict = {}
-            letters_dict = {}
-            countFileData(file_path, words_dict, letters_dict)
+            symbols_dict = {}
+            countFileData(file_path, words_dict, symbols_dict)
             total_words_dict = {k: total_words_dict.get(k, 0) +
                     words_dict.get(k, 0) for k in set(total_words_dict)
                     | set(words_dict)}
-            total_letters_dict = {k: total_letters_dict.get(k, 0) +
-                    letters_dict.get(k, 0) for k in set(total_letters_dict)
-                    | set(words_dict)}
+            total_symbols_dict = {k: total_symbols_dict.get(k, 0) +
+                    symbols_dict.get(k, 0) for k in set(total_symbols_dict)
+                    | set(symbols_dict)}
 
     print "Most common words in '%s'" % (path)
-    words_list = sorted(words_dict.items(), key=lambda x:x[1], reverse=True)
+    words_list = sorted(total_words_dict.items(), key=lambda x:x[1], reverse=True)
     i = 0
     for item in words_list:
         i += 1
@@ -48,7 +48,7 @@ def printPathStatus(path):
         print "%s - %d" % (item[0], item[1])
 
     print "Most common letters in '%s'" % (path)
-    letters_list = sorted(letters_dict.items(),
+    letters_list = sorted(total_symbols_dict.items(),
             key=lambda x:x[1], reverse=True)
     i = 0
     for item in letters_list:
