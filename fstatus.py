@@ -10,7 +10,6 @@ def countFileData(filepath, words_dict, letters_dict):
                     words_dict[word] += 1
                 else:
                     words_dict[word] = 1
-                
                 for letter in word:
                     if letter in letters_dict:
                         letters_dict[letter] += 1
@@ -21,15 +20,23 @@ def countFileData(filepath, words_dict, letters_dict):
 def printPathStatus(path):
     print "Path '%s' information:" % (path)
     file_path = ""
-    words_dict = {}
-    letters_dict = {}
+    total_words_dict = {}
+    total_letters_dict = {}
     for file in os.listdir(path):
         file_path = path
         if not path.endswith('/'):
             file_path += "/"
         file_path += file
         if os.path.isfile(file_path):
+            words_dict = {}
+            letters_dict = {}
             countFileData(file_path, words_dict, letters_dict)
+            total_words_dict = {k: total_words_dict.get(k, 0) +
+                    words_dict.get(k, 0) for k in set(total_words_dict)
+                    | set(words_dict)}
+            total_letters_dict = {k: total_letters_dict.get(k, 0) +
+                    letters_dict.get(k, 0) for k in set(total_letters_dict)
+                    | set(words_dict)}
 
     print "Most common words in '%s'" % (path)
     words_list = sorted(words_dict.items(), key=lambda x:x[1], reverse=True)
